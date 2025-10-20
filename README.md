@@ -21,7 +21,7 @@ npx json-server --watch db.json --port 5000
 3. Jalankan frontend
 
 ```powershell
-npm install && npm run dev
+npm run dev
 ```
 
 Frontend akan tersedia di `http://localhost:3000` dan mock API di `http://localhost:5000`.
