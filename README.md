@@ -4,6 +4,10 @@
 *Tanggal mulai:* 2025-10-19  
 *Tanggal selesai:* 2025-10-20
 
+## Setup Project
+1. git clone https://github.com/AlexanderDev2004/solid-ecommerce.git
+2. cd solid-ecommerce
+
 ## Cara Menjalankan
 
 1. Jalankan Mock API (mock server pada port 5000):
