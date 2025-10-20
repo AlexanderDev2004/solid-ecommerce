@@ -24,7 +24,7 @@ npx json-server --watch db.json --port 5000
 npm install && npm run dev
 ```
 
-Frontend akan tersedia di `http://localhost:5173` dan mock API di `http://localhost:5000`.
+Frontend akan tersedia di `http://localhost:3000` dan mock API di `http://localhost:5000`.
 
 ## Available accounts
 
