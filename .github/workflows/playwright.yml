@@ -27,14 +27,14 @@ jobs:
 
       - name: Start Mock API
         run: |
-          nohup npm run mock-api > mock-api.log 2>&1 &
-          echo "⏳ Waiting for mock API (http://localhost:5000)..."
-          for i in {1..20}; do
-            if curl -s http://localhost:5000/users > /dev/null; then
-              echo "✅ Mock API ready!"
+          nohup npm run dev > solid.log 2>&1 &
+          echo "⏳ Waiting for Solid server (http://localhost:5173)..."
+          for i in {1..30}; do
+            if curl -s http://localhost:5173 > /dev/null; then
+              echo "✅ Solid server ready!"
               break
             fi
-            echo "⏱️ Waiting ($i/20)..."
+            echo "⏱️ Waiting ($i/30)..."
             sleep 1
           done
 

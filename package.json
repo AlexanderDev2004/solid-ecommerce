@@ -4,12 +4,12 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "mock-api": "json-server --watch db.json --port 5000",
-    "test:e2e": "npx playwright test"
+     "start": "vite",
+      "dev": "vite --host",
+      "build": "vite build",
+      "serve": "vite preview",
+      "mock-api": "json-server --watch db.json --port 5000",
+      "test:e2e": "npx playwright test"
   },
   "license": "MIT",
   "devDependencies": {
