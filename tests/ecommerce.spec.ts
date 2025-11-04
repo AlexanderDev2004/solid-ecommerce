@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("E-Commerce DataMart", () => {
-  test.setTimeout(60000); //  tambahan waktu maksimal 60 detik
+  test.setTimeout(60000);
 
   test("Customer dapat login dan membeli paket", async ({ page }) => {
     await page.goto("/");
@@ -32,16 +32,17 @@ test.describe("E-Commerce DataMart", () => {
     await page.fill('input[placeholder="Nama paket"]', "Paket Test");
     await page.fill('input[placeholder="Harga"]', "99999");
     await page.click('button:has-text("Tambah")');
-
     await expect(page.getByText("Paket Test")).toBeVisible();
 
-    // Hapus paket yang baru ditambahkan
-    const dialogPromise = page.waitForEvent("dialog");
-    await page.locator('tr:has-text("Paket Test") button:has-text("Hapus")').click();
-    const dialog = await dialogPromise;
-    await dialog.accept();
+    // --- 🧩 Bypass confirm dialog di CI ---
+    await page.evaluate(() => {
+      window.confirm = () => true;
+    });
 
-    // Tunggu perubahan tersimpan
+    // Klik tombol hapus baris "Paket Test"
+    await page.locator('tr:has-text("Paket Test") button:has-text("Hapus")').click();
+
+    // Tunggu perubahan json-server selesai
     await page.waitForTimeout(1500);
 
     await expect(page.getByText("Paket Test")).not.toBeVisible();
