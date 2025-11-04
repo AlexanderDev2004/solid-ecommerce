@@ -1,4 +1,4 @@
-name: Playwright Tests ecommerce
+name: Playwright Tests E-Commerce
 
 on:
   push:
@@ -11,52 +11,74 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # --- 1️⃣ Checkout repo ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # --- 2️⃣ Setup Node.js ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # --- 3️⃣ Install dependencies ---
       - name: Install dependencies
         run: npm ci
 
+      # --- 4️⃣ Install Playwright browsers ---
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Start Mock API
+      # --- 5️⃣ Start Mock API ---
+      - name: Start Mock API (json-server)
         run: |
-          nohup npm run dev > solid.log 2>&1 &
-          echo "⏳ Waiting for Solid server (http://localhost:5173)..."
+          nohup npm run mock-api > mock-api.log 2>&1 &
+          echo "⏳ Waiting for mock API (http://localhost:5000)..."
           for i in {1..30}; do
-            if curl -s http://localhost:5173 > /dev/null; then
-              echo "✅ Solid server ready!"
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "✅ Mock API ready!"
               break
             fi
             echo "⏱️ Waiting ($i/30)..."
             sleep 1
           done
 
-      - name: Start Solid server
+      # --- 6️⃣ Build SolidJS app ---
+      - name: Build SolidJS project
+        run: npm run build
+
+      # --- 7️⃣ Start SolidJS preview server ---
+      - name: Start SolidJS preview
         run: |
-          nohup npm run dev > solid.log 2>&1 &
-          echo "⏳ Waiting for Solid server (http://localhost:5173)..."
-          for i in {1..20}; do
+          nohup npm run serve > solid.log 2>&1 &
+          echo "⏳ Waiting for Solid preview (http://localhost:5173)..."
+          for i in {1..40}; do
             if curl -s http://localhost:5173 > /dev/null; then
-              echo "✅ Solid server ready!"
+              echo "✅ Solid preview ready!"
               break
             fi
-            echo "⏱️ Waiting ($i/20)..."
+            echo "⏱️ Waiting ($i/40)..."
             sleep 1
           done
 
+      # --- 8️⃣ Jalankan Playwright Tests ---
       - name: Run Playwright tests
         run: npx playwright test
 
-      - name: Upload HTML report
+      # --- 9️⃣ Upload HTML report ---
+      - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
+
+      # --- 🔟 Upload log jika gagal ---
+      - name: Upload logs if failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: |
+            mock-api.log
+            solid.log
