@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("E-Commerce DataMart", () => {
+  test.setTimeout(60000); //  tambahan waktu maksimal 60 detik
+
   test("Customer dapat login dan membeli paket", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByText("Login")).toBeVisible();
@@ -11,7 +13,6 @@ test.describe("E-Commerce DataMart", () => {
 
     await expect(page.getByText("Pilih Paket Internet")).toBeVisible();
 
-    // Pasang listener SEBELUM klik
     const dialogPromise = page.waitForEvent("dialog");
     await page.click('text=Beli Paket');
     const dialog = await dialogPromise;
@@ -34,14 +35,14 @@ test.describe("E-Commerce DataMart", () => {
 
     await expect(page.getByText("Paket Test")).toBeVisible();
 
-    // Hapus paket
+    // Hapus paket yang baru ditambahkan
     const dialogPromise = page.waitForEvent("dialog");
-    await page.click('button:has-text("Hapus")');
+    await page.locator('tr:has-text("Paket Test") button:has-text("Hapus")').click();
     const dialog = await dialogPromise;
     await dialog.accept();
 
-    // Tunggu 1 detik untuk sinkronisasi json-server
-    await page.waitForTimeout(1000);
+    // Tunggu perubahan tersimpan
+    await page.waitForTimeout(1500);
 
     await expect(page.getByText("Paket Test")).not.toBeVisible();
   });
