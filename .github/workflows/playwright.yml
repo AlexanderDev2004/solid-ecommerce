@@ -28,12 +28,28 @@ jobs:
       - name: Start Mock API
         run: |
           nohup npm run mock-api > mock-api.log 2>&1 &
-          sleep 3
+          echo "⏳ Waiting for mock API (http://localhost:5000)..."
+          for i in {1..20}; do
+            if curl -s http://localhost:5000/users > /dev/null; then
+              echo "✅ Mock API ready!"
+              break
+            fi
+            echo "⏱️ Waiting ($i/20)..."
+            sleep 1
+          done
 
       - name: Start Solid server
         run: |
           nohup npm run dev > solid.log 2>&1 &
-          sleep 3
+          echo "⏳ Waiting for Solid server (http://localhost:5173)..."
+          for i in {1..20}; do
+            if curl -s http://localhost:5173 > /dev/null; then
+              echo "✅ Solid server ready!"
+              break
+            fi
+            echo "⏱️ Waiting ($i/20)..."
+            sleep 1
+          done
 
       - name: Run Playwright tests
         run: npx playwright test

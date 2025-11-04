@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "mock-api": "node reset-server.js",
+    "mock-api": "json-server --watch db.json --port 5000",
     "test:e2e": "npx playwright test"
   },
   "license": "MIT",
@@ -16,6 +16,7 @@
     "@playwright/test": "^1.56.1",
     "@tailwindcss/vite": "^4.1.13",
     "@types/node": "^24.10.0",
+    "json-server": "^1.0.0-beta.3",
     "solid-devtools": "^0.34.3",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
