@@ -7,7 +7,9 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "mock-api": "node reset-server.js",
+    "test:e2e": "npx playwright test"
   },
   "license": "MIT",
   "devDependencies": {
